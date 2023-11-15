@@ -42,6 +42,7 @@ public class JuegoBingo extends JFrame {
 //    private static String ip = "54.175.182.62"; // IP PÚBLICA (AMAZON AWS)
 	private boolean Pausa = false;
     private static int port = 6666;
+    private static int lineaHecha = 0;
 	static ArrayList<Integer> arraySeleccionados = new ArrayList<>();
 	static ArrayList<Integer> arrayValidos = new ArrayList<>();
     private static List<Integer> arrayTodosNums = new ArrayList<>();
@@ -288,6 +289,7 @@ public class JuegoBingo extends JFrame {
 		            } else {
 						// EN CASO DE QUE FALLE LA PREGUNTA, ENVIAR DESPAUSA AL SERVIDOR
 						JOptionPane.showConfirmDialog(null, "Has fallado la pregunta!", "Aviso", JOptionPane.DEFAULT_OPTION);
+						btnLinea.setEnabled(false);
 		            	enviarDespausaLineaNoAcertada();
 		            }
 		        }
@@ -747,7 +749,7 @@ public class JuegoBingo extends JFrame {
 	                    lblNumeros.setText(Integer.toString(numero));
 	                    publish(numero);
 	                    // Thread.sleep(5000);
-						Thread.sleep(100);
+						Thread.sleep(200);
 	                    while (Pausa) {
 	                    	Thread.sleep(100);
 	                    	if (Pausa == false) {
@@ -775,8 +777,7 @@ public class JuegoBingo extends JFrame {
 			// CUANDO TERMINE ESTE THREAD SIGNIFICA QUE YA SE HAN GENERADO TODOS LOS NÚMEROS
 			@Override
 	        protected void done() {
-				JOptionPane.showConfirmDialog(null, "Partida finalizada.", "Aviso", JOptionPane.DEFAULT_OPTION);
-				System.exit(0);
+//				System.exit(0);
 	        }
 	    };
 
@@ -886,13 +887,15 @@ public class JuegoBingo extends JFrame {
 					        client.sendMessage("[%obtener_nombre%]");
 					        String respuestaNombreObtenido = client.receiveMessage();
 					        if (respuestaIniciarPartida.equals("1")) {
-								JOptionPane.showConfirmDialog(null, ("La linea es correcta! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.YES_OPTION);
-					        	btnLinea.setEnabled(false);
-								break;
+					        	if (lineaHecha == 0) {
+					        		lineaHecha = 1;
+									JOptionPane.showConfirmDialog(null, ("La linea es correcta! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
+						        	btnLinea.setEnabled(false);
+					        	}
 					        }
 
 					        if (respuestaIniciarPartida.equals("2")) {
-								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.YES_OPTION);
+								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
 					        	btnBingo.setEnabled(false);
 					        	btnLinea.setEnabled(false);
 								break;
@@ -903,14 +906,15 @@ public class JuegoBingo extends JFrame {
 					        }
 
 					        if (respuestaIniciarPartida.equals("4")) {
-					        	Pausa = false;
-					        	btnLinea.setEnabled(false);
-								break;
+					        	if (lineaHecha == 0) {
+					        		lineaHecha = 1;
+									JOptionPane.showConfirmDialog(null, ("La linea es correcta! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
+						        	btnLinea.setEnabled(false);
+					        	}
 					        }
 					        
 					        if (respuestaIniciarPartida.equals("7")) {
 					        	Pausa = false;
-								break;
 					        }
 
 							if (respuestaIniciarPartida.equals("8")) {
@@ -922,11 +926,12 @@ public class JuegoBingo extends JFrame {
 					        	Pausa = false;
 					        	btnLinea.setEnabled(false);
 					        	btnBingo.setEnabled(false);
+								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.YES_OPTION);
 								break;
 					        }
 							
 		                    try {
-		                        TimeUnit.MILLISECONDS.sleep(100);
+		                        TimeUnit.MILLISECONDS.sleep(1000);
 		                    } catch (InterruptedException e) {
 		                        e.printStackTrace();
 		                    }
