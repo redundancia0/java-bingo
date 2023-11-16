@@ -50,6 +50,7 @@ public class JuegoBingo extends JFrame {
 	static String arrayServidorValidos;
 	private static String jugador_nombre = "";
 	private static Random random = new Random();
+	// ARRAY CON TODAS LAS PREGUNTAS
 	private static String[] preguntas = {
            "Días de permiso retribuidos por traslado del domicilio habitual\na) 1  \nb) 2\n",
            "Las empresas con 25 o más trabajadores deben tener un plan de igualdad\na) 1 Verdadero\nb) 2 Falso  \n",
@@ -102,6 +103,7 @@ public class JuegoBingo extends JFrame {
 		   "¿El trabajador puede extinguir contrato sin motivo alguno?\na) Sí\nb) No",
         };
 
+	// ARRAY CON TODAS LAS RESPUESTAS
 	private static char[] respuestasCorrectas = {
 		'a', 
 		'b', 
@@ -682,6 +684,7 @@ public class JuegoBingo extends JFrame {
           }	
         }
         
+        // EJECUTAR LA FUNCIÓN PARA PONER A LA ESCUCHA LOS BOTONES
         EscucharBotones();
     }
     
@@ -720,9 +723,7 @@ public class JuegoBingo extends JFrame {
 
     }
 
-	/**
-	 * Launch the application.
-	 */
+    // FUNCIÓN -> PRINCIPAL DE ARRANQUE
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -749,7 +750,7 @@ public class JuegoBingo extends JFrame {
 	                    int numero = Integer.parseInt(token);
 	                    lblNumeros.setText(Integer.toString(numero));
 	                    publish(numero);
-	                    Thread.sleep(10);
+	                    Thread.sleep(3000);
 	                    while (Pausa) {
 	                    	Thread.sleep(100);
 	                    	if (Pausa == false) {
@@ -874,6 +875,7 @@ public class JuegoBingo extends JFrame {
 				colorBotones();
             	llenarArrayNumsValidos();
             	
+            	// THREAD DE COMPROBACIÓN DE EVENTOS EN LA PARTIDA (SI HAY LÍNEA, SI HAY BINGO, ETC..)
 		        Runnable testRunnable2 = new Runnable() {
 		            @Override
 		            public void run() {	
@@ -885,6 +887,7 @@ public class JuegoBingo extends JFrame {
 					        client.startConnection(ip, port);
 					        client.sendMessage("[%obtener_nombre%]");
 					        String respuestaNombreObtenido = client.receiveMessage();
+					        // RECIBIR QUE LA LÍNEA ES CORRECTA
 					        if (respuestaIniciarPartida.equals("1")) {
 					        	if (lineaHecha == 0) {
 					        		lineaHecha = 1;
@@ -894,6 +897,7 @@ public class JuegoBingo extends JFrame {
 					        	}
 					        }
 
+					        // RECIBIR QUE EL BINGO ES CORRECTO
 					        if (respuestaIniciarPartida.equals("2")) {
 					        	if (bingoHecho == 0) {
 					        		bingoHecho = 1;
@@ -903,10 +907,12 @@ public class JuegoBingo extends JFrame {
 					        	}
 					        }
 							
+					        // RECIBIR LA PAUSA DE QUIEN HA HECHO LÍNEA
 					        if (respuestaIniciarPartida.equals("3")) {
 					        	Pausa = true;
 					        }
 
+					        // RECIBIR QUE ALGUIEN HA HECHO LÍNEA
 					        if (respuestaIniciarPartida.equals("4")) {
 					        	if (lineaHecha == 0) {
 					        		lineaHecha = 1;
@@ -916,6 +922,7 @@ public class JuegoBingo extends JFrame {
 					        	}
 					        }
 					        
+							// RECIBIR QUE EL BINGO ES CORRECTO, DESACTIVAR BOTONES (LÍNEA Y BINGO) Y MOSTRAR MENSAJE
 					        if (respuestaIniciarPartida.equals("5")) {
 					        	if (bingoHecho == 0) {
 					        		bingoHecho = 1;
@@ -925,14 +932,17 @@ public class JuegoBingo extends JFrame {
 					        	}
 					        }
 					        
+					        // RECIBIR QUE SIMPLEMENTE QUITE LA PAUSA
 					        if (respuestaIniciarPartida.equals("7")) {
 					        	Pausa = false;
 					        }
 
+					        // RECIBIR QUE SIMPLEMENTE QUITE LA PAUSA
 							if (respuestaIniciarPartida.equals("8")) {
 					        	Pausa = false;
 					        }
 					        
+							// RECIBIR QUE EL BINGO ES CORRECTO, DESACTIVAR BOTONES (LÍNEA Y BINGO) Y MOSTRAR MENSAJE
 					        if (respuestaIniciarPartida.equals("6")) {
 					        	Pausa = false;
 					        	btnLinea.setEnabled(false);
@@ -940,6 +950,7 @@ public class JuegoBingo extends JFrame {
 								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.YES_OPTION);
 					        }
 							
+					        // COMPROBAR CADA 1000 MILISEGUNDOS
 		                    try {
 		                        TimeUnit.MILLISECONDS.sleep(1000);
 		                    } catch (InterruptedException e) {
@@ -948,6 +959,8 @@ public class JuegoBingo extends JFrame {
 		                }
 		            }
 		        };
+		        
+		        // THREAD DE COMPROBACIÓN DE PARTIDA INICIADA
 		        Runnable testRunnable = new Runnable() {
 		            @Override
 		            public void run() {	
@@ -1112,6 +1125,7 @@ public class JuegoBingo extends JFrame {
 		
 		botones.add(btnLinea, "cell 0 0,grow");
 				
+		// EN CASO DE QUE SE SELECCIONE "NuevaPartida", CONECTARSE A LA PARTIDA DEL SERVIDOR
 		JButton btnNuevaPartida = new JButton("Nueva partida");
 		btnNuevaPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
