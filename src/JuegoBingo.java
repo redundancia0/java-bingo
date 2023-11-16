@@ -43,6 +43,7 @@ public class JuegoBingo extends JFrame {
 	private boolean Pausa = false;
     private static int port = 6666;
     private static int lineaHecha = 0;
+    private static int bingoHecho = 0;
 	static ArrayList<Integer> arraySeleccionados = new ArrayList<>();
 	static ArrayList<Integer> arrayValidos = new ArrayList<>();
     private static List<Integer> arrayTodosNums = new ArrayList<>();
@@ -748,7 +749,7 @@ public class JuegoBingo extends JFrame {
 	                    int numero = Integer.parseInt(token);
 	                    lblNumeros.setText(Integer.toString(numero));
 	                    publish(numero);
-	                    Thread.sleep(500);
+	                    Thread.sleep(10);
 	                    while (Pausa) {
 	                    	Thread.sleep(100);
 	                    	if (Pausa == false) {
@@ -894,10 +895,12 @@ public class JuegoBingo extends JFrame {
 					        }
 
 					        if (respuestaIniciarPartida.equals("2")) {
-								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
-					        	btnBingo.setEnabled(false);
-					        	btnLinea.setEnabled(false);
-								break;
+					        	if (bingoHecho == 0) {
+					        		bingoHecho = 1;
+									JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
+						        	btnBingo.setEnabled(false);
+						        	btnLinea.setEnabled(false);	
+					        	}
 					        }
 							
 					        if (respuestaIniciarPartida.equals("3")) {
@@ -913,13 +916,21 @@ public class JuegoBingo extends JFrame {
 					        	}
 					        }
 					        
+					        if (respuestaIniciarPartida.equals("5")) {
+					        	if (bingoHecho == 0) {
+					        		bingoHecho = 1;
+									JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
+						        	btnBingo.setEnabled(false);
+						        	btnLinea.setEnabled(false);	
+					        	}
+					        }
+					        
 					        if (respuestaIniciarPartida.equals("7")) {
 					        	Pausa = false;
 					        }
 
 							if (respuestaIniciarPartida.equals("8")) {
 					        	Pausa = false;
-								break;
 					        }
 					        
 					        if (respuestaIniciarPartida.equals("6")) {
@@ -927,7 +938,6 @@ public class JuegoBingo extends JFrame {
 					        	btnLinea.setEnabled(false);
 					        	btnBingo.setEnabled(false);
 								JOptionPane.showConfirmDialog(null, ("El bingo es correcto! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.YES_OPTION);
-								break;
 					        }
 							
 		                    try {
