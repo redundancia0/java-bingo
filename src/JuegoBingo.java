@@ -38,7 +38,7 @@ public class JuegoBingo extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static String respuestaNumeros;
 	private static String respuestaPosiciones;
-    private static String ip = "127.0.0.1";
+    private static String ip = "192.168.0.79";
 //    private static String ip = "54.175.182.62"; // IP PÚBLICA (AMAZON AWS)
 	private boolean Pausa = false;
     private static int port = 6666;
@@ -748,12 +748,10 @@ public class JuegoBingo extends JFrame {
 	                    int numero = Integer.parseInt(token);
 	                    lblNumeros.setText(Integer.toString(numero));
 	                    publish(numero);
-	                    // Thread.sleep(5000);
-						Thread.sleep(200);
+	                    Thread.sleep(500);
 	                    while (Pausa) {
 	                    	Thread.sleep(100);
 	                    	if (Pausa == false) {
-	                    		break;
 	                    	}
 	                    }
 
@@ -891,6 +889,7 @@ public class JuegoBingo extends JFrame {
 					        		lineaHecha = 1;
 									JOptionPane.showConfirmDialog(null, ("La linea es correcta! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
 						        	btnLinea.setEnabled(false);
+						        	Pausa = false;
 					        	}
 					        }
 
@@ -910,6 +909,7 @@ public class JuegoBingo extends JFrame {
 					        		lineaHecha = 1;
 									JOptionPane.showConfirmDialog(null, ("La linea es correcta! Completado por " + respuestaNombreObtenido), "Aviso", JOptionPane.DEFAULT_OPTION);
 						        	btnLinea.setEnabled(false);
+						        	Pausa = false;
 					        	}
 					        }
 					        
